@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const cors =  require("cors");
 const path = require('path');  // Importing the path module
+const dotenv =require('dotenv');
+dotenv.config();
 const app = express();
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -30,9 +32,7 @@ const port = process.env.PORT || 8080;
 
 async function connectiontodb(){
     try{
-        await mongoose.connect(
-            "mongodb+srv://priyakoushiik:QT2vRypQt5EwDL1g@triptroves.qyridzv.mongodb.net/TripTrove?retryWrites=true&w=majority&appName=triptroves"
-        );
+        await mongoose.connect(process.env.MONGO_URL);
         app.listen(port,()=>{
             console.log("The app is listening in the port no 8080 ...");
         });
