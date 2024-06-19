@@ -1,0 +1,22 @@
+body {
+    background-color:  #bddefc;
+  }
+  
+  .my-5 {
+    margin-top: 3rem !important;
+    margin-bottom: 3rem !important;
+  }
+  
+  .blog-container {
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: #f02424;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }

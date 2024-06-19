@@ -1,0 +1,60 @@
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+  
+  .mt-3 {
+    margin-top: 1rem !important;
+  }
+  
+  .bg-light {
+    background-color: #f8f9fa !important;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .text-center {
+    text-align: center !important;
+  }
+  
+  .custom-card {
+    width: 100%;
+    max-width: 350px; /* Increase the max-width to make the card larger */
+    margin: auto; /* Center the card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #cad2da;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+  }
+  .large-text {
+    font-size: 1.25rem; /* Adjust this value as needed for larger text */
+  }
+
+  .backgroundimg{
+    background-image: url('https://s3.amazonaws.com/cdn.designcrowd.com/blog/2018/May/5-Steps-to-Designing-an-Eye-Catching-Travel-Blog/DI_5-Steps-To-Designing-An-Eye-Catching-Travel-Blog_Banner_828x300.jpg'); /* Replace 'path_to_your_image.jpg' with the actual path to your background image */
+    background-size: cover;
+    
+  }
+  
+  .large-text {
+    font-size: 1.25rem; /* Adjust this value as needed for larger text */
+  }
+  
+  .dark-text {
+    color: #000000fd; /* Use a dark color for the text */
+  }
+
+  .body3 {
+    background-color: #bddefc; /* Choose your desired background color */
+    margin: 0; /* Ensure there's no default margin */
+    padding: 0; /* Ensure there's no default padding */
+    font-family: Arial, sans-serif; /* Optional: Set a default font */
+  }
