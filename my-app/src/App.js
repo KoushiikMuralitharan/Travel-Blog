@@ -22,7 +22,7 @@ function SignIn() {
       // Perform sign-in action (e.g., call to backend API)
       try {
         const loginresponse = await fetch(
-          `http://localhost:8080/validateUser`,
+          `${process.env.REACT_APP_API_KEY}/validateUser`,
           {
             method: "POST",
             headers: {

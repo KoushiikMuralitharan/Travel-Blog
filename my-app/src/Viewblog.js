@@ -8,7 +8,7 @@ function Viewblog() {
     const [blogs, setBlogs] = useState([]);
     const [cookies] = useCookies(['token']);
   const getMyBlogs = () =>{
-    fetch(`http://localhost:8080/get-myblogs/${cookies.userID}`,{
+    fetch(`${process.env.REACT_APP_API_KEY}/get-myblogs/${cookies.userID}`,{
       method:"GET",
       headers:{
         "Authorization":`Bearer ${cookies.token}`,

@@ -20,7 +20,7 @@ function SignUp() {
       setError('');
       // Perform signup action (e.g., call to backend API)
       try{
-        const response = await fetch(`http://localhost:8080/addUser`,{
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/addUser`,{
           method: "POST",
           headers:{
             "Content-Type" : "application/json"

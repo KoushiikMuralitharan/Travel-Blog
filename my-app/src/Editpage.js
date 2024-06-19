@@ -15,7 +15,7 @@ function EditBlog() {
   const [cookies] = useCookies(["token"]);
   console.log(id);
   const getSingleBlog = () => {
-    fetch(`http://localhost:8080/getting-blog/${id}`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/getting-blog/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
