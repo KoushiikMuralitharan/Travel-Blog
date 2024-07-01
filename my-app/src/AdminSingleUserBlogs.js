@@ -37,7 +37,7 @@ const AdminSingleUserBlogs = () => {
 
     const handleDelete = async (blogID) => {
         try{
-         const response = await fetch(`http://localhost:8080/delete-blog/${blogID}`,{
+         const response = await fetch(`${process.env.REACT_APP_API_KEY}/delete-blog/${blogID}`,{
            method: "DELETE",
            headers:{
              "Authorization":`Bearer ${cookies.token}`,

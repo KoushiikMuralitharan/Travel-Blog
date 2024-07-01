@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
   const handleMakeAdmin = async (id) => {
     console.log('Make Admin clicked');
-    const response = await fetch(`http://localhost:8080/update-userrole/${id}`,{
+    const response = await fetch(`${process.env.REACT_APP_API_KEY}/update-userrole/${id}`,{
         method:"PATCH",
         headers:{
             "Authorization":`Bearer ${cookies.token}`,
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
     // Implement delete user functionality here
 
     try{
-        const response = await fetch(`http://localhost:8080/delete-user/${id}`,{
+        const response = await fetch(`${process.env.REACT_APP_API_KEY}/delete-user/${id}`,{
           method: "DELETE",
           headers:{
             "Authorization":`Bearer ${cookies.token}`,
