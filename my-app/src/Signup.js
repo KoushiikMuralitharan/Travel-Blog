@@ -39,6 +39,7 @@ function SignUp() {
           setCookie('token', loginData.accessToken, { maxAge: 60 * 60 * 60 })
           setCookie('userID', loginData.userDetail.userID, { maxAge: 60 * 60 * 60 })
           navigate('/');
+          window.location.reload();
         }
       }catch(error){
         console.log("API error");

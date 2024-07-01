@@ -41,13 +41,13 @@ function Viewblog() {
       }
     });
     if(response.ok){
-      alert("Contact deleted successfully");
+      alert("Blog deleted successfully");
       getMyBlogs();
     }else{
-      alert("failed to delete the contact");
+      alert("failed to delete the blog");
     }
    }catch(error){
-     console.error("Error deleting the contact:",error);
+     console.error("Error deleting the blog:",error);
    }
   };
 
@@ -56,7 +56,7 @@ function Viewblog() {
     <Container>
       <Row className="mt-5 pt-5">
         <Col>
-          <h2>All Blogs</h2>
+          <h2>Your Blogs</h2>
           <div className="blog-container">
             {blogs.length === 0 ? (
               <p>No blogs available. Add a new blog to get started.</p>

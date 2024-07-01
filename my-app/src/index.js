@@ -14,7 +14,8 @@ import EditBlog from './Editpage';
 import { createBrowserRouter,createRoutesFromElements,Route,RouterProvider } from 'react-router-dom';
 import Footer from './Footer';
 import Post from './Post';
-
+import AdminDashboard from './AdminDashboard';
+import AdminSingleUserBlogs from './AdminSingleUserBlogs';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Navtab/>}>
@@ -25,14 +26,16 @@ const router = createBrowserRouter(
        <Route path='/viewblog' element={<Viewblog/>}/>
        <Route path='/editblog/:id' element={<EditBlog/>}/>
        <Route path='/postpage' element={<Post/>}/>
+       <Route path='/admin/dashboard' element={<AdminDashboard/>}/>
+       <Route path='/admin/viewuserblogs/:id/:name' element={<AdminSingleUserBlogs/>}/>
     </Route>
   )
 )
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
-    <Footer/>
+      <RouterProvider router={router}/>
+      <Footer/>
   </React.StrictMode>
 );
 

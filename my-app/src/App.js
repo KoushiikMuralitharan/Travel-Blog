@@ -43,7 +43,8 @@ function SignIn() {
           setCookie("userID", loginData.userDetail.userID, {
             maxAge: 60 * 60 * 60,
           });
-          navigate("/");
+            navigate("/");
+            window.location.reload();
         }
       } catch (error) {
         console.log("API error");
