@@ -28,6 +28,10 @@ const  userDetailsSchema = new mongoose.Schema({
     },
     password:{
         type: String
+    },
+    role:{
+        type: String,
+        default: "visitor"
     }
 },{versionKey:false});
 

@@ -44,7 +44,7 @@ async function connectiontodb(){
 
 connectiontodb();
 
-const accessKey = "priyakoushiik";
+const accessKey = process.env.JWT_SECRET;
 function generateToken(userDetail){
     return jwt.sign(userDetail, accessKey);
 }
@@ -76,6 +76,27 @@ function authenticateToken(req,res,next){
     }
 }
 
+
+function chechAdmin(req,res,next){
+    const authHeader = req.headers.authorization;
+    const accessToken = authHeader && authHeader.split(" ")[1];
+
+    try{
+        const decodedToken = jwt.verify(accessToken, accessKey);
+        if(decodedToken.role === "admin"){
+            next();
+       }else{
+
+        res.status(403).json({
+            status: "failure",
+            message: "You have no rights to do this function"
+         })
+       }
+    }catch (error) {
+        res.status(500).json({});
+    }
+}
+
 // User functions 
 
 app.post("/addUser", async(req,res)=>{
@@ -91,7 +112,7 @@ app.post("/addUser", async(req,res)=>{
             const userDetail = {
                 username: user.username,
                 email: user.email,
-                userID: user._id
+                userID: user._id,
               };
               const accessToken = generateToken(userDetail);
               res.json({
@@ -131,7 +152,8 @@ app.post("/validateUser",async (req, res)=>{
                 username: user[0].username,
                 email: user[0].email,
                 password: user[0].password,
-                userID: user[0]._id
+                userID: user[0]._id,
+                role: user[0].role
             }
             const accessToken = generateToken(userDetail);
             res.json({
@@ -239,10 +261,38 @@ app.delete("/delete-blog/:id",authenticateToken, async(req,res)=>{
         console.log(error);
     }
 });
+ 
 
 app.get("/all-blogs",authenticateToken,async(req,res)=>{
     const val = await Blogs.find({}).sort({ createdAt: -1 });
     res.json(val);
+})
+
+
+// Admin Functions
+
+app.delete("/delete-user/:id",authenticateToken,chechAdmin,async(req,res)=>{
+    try{
+        await Blogs.deleteMany({userID: req.params.id});
+        await User.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            status: "success",
+            message:"user deleted successfully"
+        });
+    }catch (error){
+        console.log(error);
+    }
+});
+
+
+app.get("/all-users",authenticateToken,chechAdmin,async(req,res)=>{
+    const val = await User.find({role: { $ne: "admin"}}).sort({ createdAt: -1 });
+    res.json(val);
+})
+
+app.patch("/update-userrole/:id",authenticateToken,chechAdmin,async(req,res)=>{
+    const result = await User.updateOne({ _id: req.params.id }, { $set: { role: "admin" } });
+    res.json(result);
 })
 
 
