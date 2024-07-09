@@ -42,7 +42,7 @@ function EditBlog() {
     if (image) {
       formData.append('image', image);
     }
-    fetch(`/update-blog/${id}`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/update-blog/${id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
