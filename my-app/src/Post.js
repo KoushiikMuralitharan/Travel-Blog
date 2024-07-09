@@ -28,7 +28,7 @@ const Post = () => {
       setError("");
       try {
         const response = await axios.post(
-          `/add-blog/${cookies.userID}`,formData,
+          `${process.env.REACT_APP_API_KEY}/add-blog/${cookies.userID}`,formData,
           {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
