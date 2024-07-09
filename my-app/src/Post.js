@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./Blogpage.css";
 
 const Post = () => {
+  
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
