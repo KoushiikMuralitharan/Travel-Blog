@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import "./Editpage.css";
+import "./Editpage.module.css";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 

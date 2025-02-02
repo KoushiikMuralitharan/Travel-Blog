@@ -5,7 +5,7 @@
   background-size: cover;
 }
 .card {
-  max-width: 700px; /* Adjust the maximum width of the card as needed */
+  max-width: 500px; /* Adjust the maximum width of the card as needed */
   width: 50%;
   backdrop-filter: blur(10px) saturate(180%);
   background-color: rgba(255, 255, 255, 0.2); /* Adjust the opacity for the glass effect */

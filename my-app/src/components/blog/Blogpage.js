@@ -36,28 +36,20 @@ function Blogpage() {
 
   return (
    <div className='body4'>
-    <Container>
-      <Row className="my-5">
-        <Col>
-          <h2>All Blogs</h2>
           {blogs.length === 0 ? (
             <p>No blogs available. Add a new blog to get started.</p>
           ) : (
             blogs.map((blog, index) => (
-              <Card key={index} className="mb-3">
+              <Card key={index} className=" blog-card">
                 <Card.Body>
                   <Card.Title>{blog.title}</Card.Title>
                   <Card.Text>{blog.content}</Card.Text>
-                  {blog.imageUrl && <img src={blog.imageUrl} alt="Post" style={{ maxWidth: '300px' }} />}
+                  {blog.imageUrl && <img src={blog.imageUrl} alt="Post" style={{ maxWidth: '300px', maxHeight: '200px' }} />}
                 </Card.Body>
               </Card>
             ))
           )}
-        </Col>
-      </Row>
-    </Container>
    </div>
- // hi dda machi;
   );
 }
 

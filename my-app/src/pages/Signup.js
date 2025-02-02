@@ -1,10 +1,11 @@
 import React, { useState , useEffect } from 'react';
-import { Form, Button, Row, Col, Alert, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Alert, Card, Spinner } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 function SignUp() {
+  const [isLoading, setIsLoading] = useState(false); // Loader state
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -18,6 +19,7 @@ function SignUp() {
       setError('Please fill in all fields');
     } else {
       setError('');
+      setIsLoading(true); // Start loader
       // Perform signup action (e.g., call to backend API)
       try{
         const response = await fetch(`${process.env.REACT_APP_API_KEY}/addUser`,{
@@ -34,6 +36,7 @@ function SignUp() {
         const loginData = await response.json();
         if(!response.ok){
           alert("Failed to sign up");
+          setIsLoading(false);
         }else if(loginData.status === "success" && loginData.userDetail){
           alert("user account created successfully.");
           setCookie('token', loginData.accessToken, { maxAge: 60 * 60 * 60 })
@@ -43,6 +46,9 @@ function SignUp() {
         }
       }catch(error){
         console.log("API error");
+      }
+      finally {
+        setIsLoading(false); // Stop loader
       }
     }
 
@@ -54,7 +60,7 @@ function SignUp() {
         <div className="d-flex justify-content-center">
           <Card className="shadow">
             <Card.Body>
-              <h2 className="mb-4 text-center">Sign Up for Your Travel Blog Account</h2>
+              <h2 className="mb-4 text-center">Sign Up</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="formBasicName">
@@ -86,9 +92,8 @@ function SignUp() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </Form.Group>
-
-                <Button variant="primary" type="submit" className="w-100 mt-3">
-                  Sign Up
+                <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isLoading}>
+                  {isLoading ? <Spinner as="span" animation="border" size="sm" /> : "Sign Up"}
                 </Button>
               </Form>
               <div className="mt-2 text-center">

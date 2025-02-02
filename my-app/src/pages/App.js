@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Alert, Card } from "react-bootstrap";
+import { Form, Button, Row, Col, Alert, Card, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import "./App.css";
 
 function SignIn() {
+  const [isLoading, setIsLoading] = useState(false); // Loader state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,6 +20,7 @@ function SignIn() {
       setError("Please fill in all fields");
     } else {
       setError("");
+      setIsLoading(true); // Start loader
       // Perform sign-in action (e.g., call to backend API)
       try {
         const loginresponse = await fetch(
@@ -38,6 +40,7 @@ function SignIn() {
         setLoading(false);
         if (loginData.status === "failure") {
           alert(loginData.message);
+          setIsLoading(false); 
         } else {
           setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
           setCookie("userID", loginData.userDetail.userID, {
@@ -59,7 +62,7 @@ function SignIn() {
           <Card className="shadow">
             <Card.Body>
               <h2 className="mb-4 text-center">
-                Login and Dive into Travel Tales
+                Login 
               </h2>
               {error && <Alert variant="danger">{error}</Alert>}
               {loading && (
@@ -88,15 +91,10 @@ function SignIn() {
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100 mt-3">
-                  Sign In
+                <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isLoading}>
+                  {isLoading ? <Spinner as="span" animation="border" size="sm" /> : "Sign In"}
                 </Button>
               </Form>
-              <div className="mt-3 text-center">
-                <a href="#forgot-password" className="text-muted">
-                  Forgot password?
-                </a>
-              </div>
               <div className="mt-2 text-center">
                 <span className="text-muted">Don't have an account? </span>
                 <a href="/signup" className="signup-link">

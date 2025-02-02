@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import './Viewblog.css';
+import styles from './Viewblog.module.css';
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 function Viewblog() {
@@ -52,12 +52,8 @@ function Viewblog() {
   };
 
 
-  return (
-    <Container>
-      <Row className="mt-5 pt-5">
-        <Col>
-          <h2>Your Blogs</h2>
-          <div className="blog-container">
+  return ( 
+          <div className={styles.blogcontainer}>
             {blogs.length === 0 ? (
               <p>No blogs available. Add a new blog to get started.</p>
             ) : (
@@ -66,7 +62,7 @@ function Viewblog() {
                   <Card.Body>
                     <Card.Title>{blog.title}</Card.Title>
                     <Card.Text>{blog.content}</Card.Text>
-                    {blog.imageUrl && <img src={blog.imageUrl} alt="Post" style={{ maxWidth: '300px' }} />}
+                    {blog.imageUrl && <img src={blog.imageUrl} alt="Post" style={{ maxWidth: '300px',maxHeight: '200px' }} />}
                     <Link to={`/editblog/${blog._id}`} className="btn btn-warning me-2">
                       Edit
                     </Link>
@@ -78,9 +74,7 @@ function Viewblog() {
               ))
             )}
           </div>
-        </Col>
-      </Row>
-    </Container>
+    
   );
 }
 

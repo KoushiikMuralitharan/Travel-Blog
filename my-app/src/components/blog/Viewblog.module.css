@@ -1,21 +1,20 @@
-.body5 {
+body {
     background-color:  #bddefc;
   }
   
-  .my-5 {
-    margin-top: 3rem !important;
-    margin-bottom: 3rem !important;
-  }
-  
-  .blog-container {
+  .blogcontainer {
     border: 1px solid #dee2e6;
     padding: 1rem;
     border-radius: 0.25rem;
-    background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color:  #bddefc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
   }
   
-  .card-body12 {
+  .card-body1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
