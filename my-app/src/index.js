@@ -2,20 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SignIn from './App';
+import SignIn from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import Nav from './Navbar';
-import Navtab from './Navbar';
-import SignUp from './Signup';
-import HomePage from './Homepage';
-import Blogpage from './Blogpage';
-import Viewblog from './Viewblog';
-import EditBlog from './Editpage';
+import Nav from './components/common/Navbar';
+import Navtab from './components/common/Navbar';
+import SignUp from './pages/Signup';
+import HomePage from './pages/Homepage';
+import Blogpage from './components/blog/Blogpage';
+import Viewblog from './components/blog/Viewblog';
+import EditBlog from './components/blog/Editpage';
 import { createBrowserRouter,createRoutesFromElements,Route,RouterProvider } from 'react-router-dom';
-import Footer from './Footer';
-import Post from './Post';
-import AdminDashboard from './AdminDashboard';
-import AdminSingleUserBlogs from './AdminSingleUserBlogs';
+import Footer from './components/common/Footer';
+import Post from './components/blog/Post';
+import AdminDashboard from './admin/AdminDashboard';
+import AdminSingleUserBlogs from './admin/AdminSingleUserBlogs';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Navtab/>}>
