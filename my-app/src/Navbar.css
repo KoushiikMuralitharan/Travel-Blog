@@ -1,0 +1,26 @@
+.navbar {
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+    background-image: linear-gradient(to right, rgba(136, 136, 185, 0.8), rgba(28, 40, 211, 0.6)); /* Red background with fading effect */
+  }
+  
+
+.navbar-brand, .nav-link {
+  color: #000000 !important; /* Darker text color for better contrast on light background */
+}
+
+.nav-link:hover {
+  color: #00346e !important; /* Optional: Change color on hover for better interactivity */
+}
+
+.navbar-logo {
+  height: 40px; /* Adjust the height to fit your design */
+  margin-right: 10px; /* Space between the logo and the brand text */
+}
+
+.navbar {
+  transition: background-color 0.3s ease;
+}
+
+.navbar.active {
+  background-color: #333; /* Example color when the navbar is active */
+}

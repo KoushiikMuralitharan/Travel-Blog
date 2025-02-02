@@ -1,0 +1,48 @@
+
+
+.body1 {
+  background-image: url('https://c4.wallpaperflare.com/wallpaper/485/860/1017/photo-taken-on-brown-terrain-wallpaper-preview.jpg'); /* Replace 'path_to_your_image.jpg' with the actual path to your background image */
+  background-size: cover;
+}
+.card {
+  max-width: 700px; /* Adjust the maximum width of the card as needed */
+  width: 50%;
+  backdrop-filter: blur(10px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.2); /* Adjust the opacity for the glass effect */
+  border-radius: 15px;
+}
+
+.form-label,a {
+  color: #333; /* Darker color for the labels */
+  font-weight: bold; /* Optional: make the text bold */
+}
+
+.signup-link {
+  color: #012041; /* Blue color for the sign-up link */
+  font-weight: bold; /* Optional: make the text bold */
+  text-decoration: none; /* Remove underline */
+}
+
+.signup-link:hover {
+  color: #05101d; /* Darker blue on hover */
+  text-decoration: underline; /* Add underline on hover */
+}
+
+/* Preloader CSS */
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
