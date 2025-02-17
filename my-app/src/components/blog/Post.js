@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Blogpage.css";
+import styles from "./Blogpage.module.css";
 
 const Post = () => {
-  
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
@@ -17,10 +15,9 @@ const Post = () => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('title',title);
-    formData.append('content',content);
-    formData.append('image',image);
-
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("image", image);
 
     if (title === "" || content === "") {
       setError("Please fill in all fields");
@@ -28,18 +25,18 @@ const Post = () => {
       setError("");
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_KEY}/add-blog/${cookies.userID}`,formData,
+          `${process.env.REACT_APP_API_KEY}/add-blog/${cookies.userID}`,
+          formData,
           {
             headers: {
               Authorization: `Bearer ${cookies.token}`,
               "Content-Type": "multipart/form-data",
-            }
+            },
           }
         );
         if (response.data.status === "success") {
           alert(response.data.message);
-          navigate('/viewblog');
-
+          navigate("/viewblog");
         } else {
           setError(response.data.message);
         }
@@ -51,52 +48,55 @@ const Post = () => {
     }
   };
   return (
-    <div className="body4">
-      <Container>
-        <Row className="mt-5 pt-5  ">
-          <Col>
-            <h1>Add a New Blog</h1>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formTitle">
-                <Form.Label>Title</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter blog title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Form.Group>
+    <main className={styles.main_container}>
+      <form className={styles.login_container} onSubmit={handleSubmit}>
+        <div className={styles.form_input}>
+          <label id="formTitle">Title:</label>
+          <input
+            id="formTitle"
+            type="text"
+            placeholder="Enter blog title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          ></input>
+        </div>
+        <div className={styles.form_input}>
+          <label id="formContent">Content:</label>
+          <textarea
+            id="formContent"
+            type="text"
+            placeholder="Enter blog content..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          ></textarea>
+        </div>
 
-              <Form.Group controlId="formContent" className="mt-3">
-                <Form.Label>Content</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Enter blog content"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formImage" className="mt-3">
-                <Form.Label>Image</Form.Label>
-                <Form.Control
-                  rows={3}
-                  type="file"
-                  onChange={(e) => setImage(e.target.files[0])}
-                  accept="image/*"
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit" className="mt-3">
-                Add Blog
-              </Button>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+        <div className={styles.form_container}>
+          <label id="formImage">Image:</label>
+          <div className={styles.svg_container}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width= "40px"
+              height= "40px"
+              viewBox="0 -960 960 960"
+              fill="#5f6368"
+            >
+              <path d="M720-330q0 104-73 177T470-80q-104 0-177-73t-73-177v-370q0-75 52.5-127.5T400-880q75 0 127.5 52.5T580-700v350q0 46-32 78t-78 32q-46 0-78-32t-32-78v-370h80v370q0 13 8.5 21.5T470-320q13 0 21.5-8.5T500-350v-350q-1-42-29.5-71T400-800q-42 0-71 29t-29 71v370q-1 71 49 120.5T470-160q70 0 119-49.5T640-330v-390h80v390Z" />
+            </svg>
+          </div>
+          <div className={styles.form_input}>
+            <input
+              id="formImage"
+              type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+              accept="image/*"
+              className={styles.image}
+            ></input>
+          </div>
+        </div>
+        <button className={styles.my_button} type="submit">Add Blog</button>
+      </form>
+    </main>
   );
 };
 

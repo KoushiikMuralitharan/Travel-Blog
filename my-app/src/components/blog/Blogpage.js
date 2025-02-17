@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
-import './Blogpage.css';
+import styles from "./Viewblog.module.css";
 
 function Blogpage() {
   const [blogs, setBlogs] = useState([]);
@@ -35,21 +35,29 @@ function Blogpage() {
   
 
   return (
-   <div className='body4'>
-          {blogs.length === 0 ? (
-            <p>No blogs available. Add a new blog to get started.</p>
-          ) : (
-            blogs.map((blog, index) => (
-              <Card key={index} className=" blog-card">
-                <Card.Body>
-                  <Card.Title>{blog.title}</Card.Title>
-                  <Card.Text>{blog.content}</Card.Text>
-                  {blog.imageUrl && <img src={blog.imageUrl} alt="Post" style={{ maxWidth: '300px', maxHeight: '200px' }} />}
-                </Card.Body>
-              </Card>
-            ))
-          )}
-   </div>
+   <main className={styles.main_content_area}>
+         {blogs.length === 0 ? (
+           <p>No blogs available. Add a new blog to get started.</p>
+         ) : (
+           blogs.map((blog) => (
+             <div className={styles.main_card_container} key={blog._id}>
+               <div className={styles.image_container}>
+                 <img
+                   className={styles.card_image}
+                   src={blog.imageUrl}
+                   alt="place image"
+                 ></img>
+               </div>
+               <div className={styles.main_card_content}>
+                 <div>
+                 <h3>{blog.title}</h3>
+                 <div className={styles.card_content}>{blog.content}</div>
+                 </div>
+               </div>
+             </div>
+           ))
+         )}
+       </main>
   );
 }
 

@@ -1,111 +1,107 @@
-import React, { useState , useEffect } from 'react';
-import { Form, Button, Row, Col, Alert, Card, Spinner } from 'react-bootstrap';
-import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
-import './Signup.css';
+import React, { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import styles from "./App.module.css";
 
 function SignUp() {
   const [isLoading, setIsLoading] = useState(false); // Loader state
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [,setCookie] = useCookies([])
-  const [error, setError] = useState('');
+  const [, setCookie] = useCookies([]);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const handleSubmit =async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Here you can add your signup logic
-    if (username === '' || email === '' || password === '') {
-      setError('Please fill in all fields');
+    if (username === "" || email === "" || password === "") {
+      setError("Please fill in all fields");
     } else {
-      setError('');
+      setError("");
       setIsLoading(true); // Start loader
       // Perform signup action (e.g., call to backend API)
-      try{
-        const response = await fetch(`${process.env.REACT_APP_API_KEY}/addUser`,{
-          method: "POST",
-          headers:{
-            "Content-Type" : "application/json"
-          },
-          body: JSON.stringify({
-            username: username,
-            email: email,
-            password:password
-           }),
-        })
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_KEY}/addUser`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              email: email,
+              password: password,
+            }),
+          }
+        );
         const loginData = await response.json();
-        if(!response.ok){
+        if (!response.ok) {
           alert("Failed to sign up");
           setIsLoading(false);
-        }else if(loginData.status === "success" && loginData.userDetail){
+        } else if (loginData.status === "success" && loginData.userDetail) {
           alert("user account created successfully.");
-          setCookie('token', loginData.accessToken, { maxAge: 60 * 60 * 60 })
-          setCookie('userID', loginData.userDetail.userID, { maxAge: 60 * 60 * 60 })
-          navigate('/');
+          setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
+          setCookie("userID", loginData.userDetail.userID, {
+            maxAge: 60 * 60 * 60,
+          });
+          navigate("/");
           window.location.reload();
         }
-      }catch(error){
+      } catch (error) {
         console.log("API error");
-      }
-      finally {
+      } finally {
         setIsLoading(false); // Stop loader
       }
     }
-
   };
 
   return (
-    <Row className="vh-100 align-items-center body2">
-      <Col md={12}>
-        <div className="d-flex justify-content-center">
-          <Card className="shadow">
-            <Card.Body>
-              <h2 className="mb-4 text-center">Sign Up</h2>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formBasicName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter your name"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-                <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isLoading}>
-                  {isLoading ? <Spinner as="span" animation="border" size="sm" /> : "Sign Up"}
-                </Button>
-              </Form>
-              <div className="mt-2 text-center">
-                <span className="text-muted">Already have an account? </span>
-                <a href="/signin" className="signin-link">Sign in</a>
-              </div>
-            </Card.Body>
-          </Card>
+    <main className={styles.main_container}>
+      <div className={styles.sub_container}>
+        <div className={styles.img_container}>
+          <img src="https://cdn.pixabay.com/photo/2023/08/11/16/29/tourist-8183867_640.png"></img>
         </div>
-      </Col>
-    </Row>
+        <form className={styles.login_container} onSubmit={handleSubmit}>
+          <div className={styles.form_input}>
+            <label id="formUsername">Username:</label>
+            <input
+              id="formUsername"
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            ></input>
+          </div>
+          <div className={styles.form_input}>
+            <label id="formEmail">Email:</label>
+            <input
+              id="formEmail"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
+          </div>
+          <div className={styles.form_input}>
+            <label id="formPassword">Password:</label>
+            <input
+              id="formPassword"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+          </div>
+          <button className={styles.my_button} type="submit">Sign up</button>
+          <div className={styles.sign_up}>
+            <p>Have an account! </p>
+            <a href="/signin">Sign in</a>
+          </div>
+        </form>
+      </div>
+    </main>
   );
-};
+}
 
 export default SignUp;

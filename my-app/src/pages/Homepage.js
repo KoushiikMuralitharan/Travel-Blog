@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import './Homepage.css';
+import './Homepage.module.css';
 const HomePage = () => {
   return (
     <div className='body3'>

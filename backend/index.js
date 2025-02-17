@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 const {Blogs,User} = require("./Schema");
 const jwt = require("jsonwebtoken");
-// const multer = require('multer');
+const multer = require('multer');
 const cors =  require("cors");
 const path = require('path');  // Importing the path module
 const dotenv =require('dotenv');
@@ -46,7 +46,7 @@ const storage = new CloudinaryStorage({
 
 
 // Init upload
-// const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 const port = process.env.PORT || 8080;
 

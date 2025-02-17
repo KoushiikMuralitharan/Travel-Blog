@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col, Alert, Card, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import "./App.css";
+import styles from "./App.module.css";
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false); // Loader state
@@ -40,14 +39,14 @@ function SignIn() {
         setLoading(false);
         if (loginData.status === "failure") {
           alert(loginData.message);
-          setIsLoading(false); 
+          setIsLoading(false);
         } else {
           setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
           setCookie("userID", loginData.userDetail.userID, {
             maxAge: 60 * 60 * 60,
           });
-            navigate("/");
-            window.location.reload();
+          navigate("/");
+          window.location.reload();
         }
       } catch (error) {
         console.log("API error");
@@ -56,57 +55,43 @@ function SignIn() {
   };
   return (
     // Inside the SignIn component
-    <Row className="vh-100 align-items-center body1">
-      <Col md={12}>
-        <div className="d-flex justify-content-center">
-          <Card className="shadow">
-            <Card.Body>
-              <h2 className="mb-4 text-center">
-                Login 
-              </h2>
-              {error && <Alert variant="danger">{error}</Alert>}
-              {loading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 z-10">
-                  <div className="loader"></div>
-                </div>
-              )}
-              <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="formBasicPassword" className="mt-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Button variant="primary" type="submit" className="w-100 mt-3" disabled={isLoading}>
-                  {isLoading ? <Spinner as="span" animation="border" size="sm" /> : "Sign In"}
-                </Button>
-              </Form>
-              <div className="mt-2 text-center">
-                <span className="text-muted">Don't have an account? </span>
-                <a href="/signup" className="signup-link">
-                  Sign up
-                </a>
-              </div>
-            </Card.Body>
-          </Card>
+    <>
+      <main className={styles.main_container}>
+        <div className={styles.sub_container}>
+          <div className={styles.img_container}>
+            <img src="https://cdn.pixabay.com/photo/2023/08/11/16/29/tourist-8183867_640.png"></img>
+          </div>
+          <form className={styles.login_container} onSubmit={handleSubmit}>
+            <div className={styles.form_input}>
+              <label id="formEmail">Email:</label>
+              <input
+                id="formEmail"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              ></input>
+            </div>
+            <div className={styles.form_input}>
+              <label id="formPassword">Password:</label>
+              <input
+                id="formPassword"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></input>
+            </div>
+            <button className={styles.my_button} type="submit">Login</button>
+            <div className={styles.sign_up}>
+              <p>Don't have an account!</p>
+              <a href="/signup">Sign up</a>
+            </div>
+          </form>
         </div>
-      </Col>
-    </Row>
+      </main>
+    </>
   );
 }
 // added
-export  default SignIn;
+export default SignIn;

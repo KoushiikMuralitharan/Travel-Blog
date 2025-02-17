@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './pages/App';
 import reportWebVitals from './reportWebVitals';
-import Nav from './components/common/Navbar';
+//import Nav from './components/common/Navbar';
 import Navtab from './components/common/Navbar';
 import SignUp from './pages/Signup';
 import HomePage from './pages/Homepage';
@@ -35,7 +35,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
       <RouterProvider router={router}/>
-      <Footer/>
+      {/* <Footer/> */}
   </React.StrictMode>
 );
 
