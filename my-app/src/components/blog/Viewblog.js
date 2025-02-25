@@ -59,6 +59,7 @@ function Viewblog() {
 
   return (
     <main className={styles.main_content_area}>
+      <h2>My Blogs</h2>
       {blogs.length === 0 ? (
         <p>No blogs available. Add a new blog to get started.</p>
       ) : (

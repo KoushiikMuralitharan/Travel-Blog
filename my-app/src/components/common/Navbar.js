@@ -81,10 +81,10 @@ const Navtab = () => {
                 </a>
               </li>
               <li>
-                <a href="/viewblog">Your Blogs</a>
+                <a href="/viewblog"><i className="fa-solid fa-address-book"></i></a>
               </li>
               <li>
-                <a href="/postpage">feeds</a>
+                <a href="/postpage"><i className="fa-solid fa-message"></i></a>
               </li>
               {isAdmin && (
                 <li className="nav-item">

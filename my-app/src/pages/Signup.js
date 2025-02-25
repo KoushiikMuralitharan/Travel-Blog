@@ -60,7 +60,7 @@ function SignUp() {
     <main className={styles.main_container}>
       <div className={styles.sub_container}>
         <div className={styles.img_container}>
-          <img src="https://cdn.pixabay.com/photo/2023/08/11/16/29/tourist-8183867_640.png"></img>
+          <img src="https://img.freepik.com/free-photo/travel-concept-with-baggage_23-2149153260.jpg"></img>
         </div>
         <form className={styles.login_container} onSubmit={handleSubmit}>
           <div className={styles.form_input}>
