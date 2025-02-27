@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./AdminDashboard.module.css"
 const AdminDashboard = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
@@ -32,7 +33,8 @@ const AdminDashboard = () => {
   };
 
   const handleMakeAdmin = async (id) => {
-    console.log("Make Admin clicked");
+    setIsLoading(true);
+    // console.log("Make Admin clicked");
     const response = await fetch(
       `${process.env.REACT_APP_API_KEY}/update-userrole/${id}`,
       {
@@ -45,6 +47,7 @@ const AdminDashboard = () => {
     );
     if (response.ok) {
       alert("User role updated successfully");
+      setIsLoading(false);
       allusers();
     } else {
       alert("failed to update the user role");
@@ -52,9 +55,8 @@ const AdminDashboard = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    console.log("Delete User clicked");
-    // Implement delete user functionality here
-
+    setIsLoading(true);
+    // console.log("Delete User clicked");
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_KEY}/delete-user/${id}`,
@@ -68,6 +70,7 @@ const AdminDashboard = () => {
       );
       if (response.ok) {
         alert("User deleted successfully");
+        setIsLoading(false);
         allusers();
       } else {
         alert("failed to delete the blog");
@@ -101,8 +104,12 @@ const AdminDashboard = () => {
 
                 <div className={styles.buttons}>
                   <button  onClick={()=>{handleViewBlog(users._id,users.username)}}>View</button>
-                  <button  onClick={()=>handleMakeAdmin(users._id)}>Make Admin</button>
-                  <button  onClick={()=> handleDeleteUser(users._id) }>Delete</button>
+                  <button  onClick={()=>handleMakeAdmin(users._id)}>
+                    {isLoading ? <span className={styles.loader}></span> : "Make Admin"}
+                  </button>
+                  <button  onClick={()=> handleDeleteUser(users._id) }>
+                  {isLoading ? <span className={styles.loader}></span> : "Delete"}
+                  </button>
                 </div>
               </div>
             ))

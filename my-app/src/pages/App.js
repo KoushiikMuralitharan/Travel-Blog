@@ -7,7 +7,6 @@ function SignIn() {
   const [isLoading, setIsLoading] = useState(false); // Loader state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [, setCookie] = useCookies([]);
   const [error, setError] = useState("");
 
@@ -36,7 +35,6 @@ function SignIn() {
           }
         );
         const loginData = await loginresponse.json();
-        setLoading(false);
         if (loginData.status === "failure") {
           alert(loginData.message);
           setIsLoading(false);
@@ -82,7 +80,9 @@ function SignIn() {
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
             </div>
-            <button className={styles.my_button} type="submit">Login</button>
+            <button className={styles.my_button} type="submit">
+              {isLoading ? <span className={styles.loader}></span> : "Login"}
+            </button>
             <div className={styles.sign_up}>
               <p>Don't have an account!</p>
               <a href="/signup">Sign up</a>

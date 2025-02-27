@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Blogpage.module.css";
 
 const Post = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
@@ -24,6 +25,7 @@ const Post = () => {
     } else {
       setError("");
       try {
+        setIsLoading(true);
         const response = await axios.post(
           `${process.env.REACT_APP_API_KEY}/add-blog/${cookies.userID}`,
           formData,
@@ -36,6 +38,7 @@ const Post = () => {
         );
         if (response.data.status === "success") {
           alert(response.data.message);
+          setIsLoading(false);
           navigate("/viewblog");
         } else {
           setError(response.data.message);
@@ -94,7 +97,9 @@ const Post = () => {
             ></input>
           </div>
         </div>
-        <button className={styles.my_button} type="submit">Add Blog</button>
+        <button className={styles.my_button} type="submit">
+          {isLoading ? <span className={styles.loader}></span> : "Add Blog"}
+        </button>
       </form>
     </main>
   );

@@ -93,7 +93,9 @@ function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
           </div>
-          <button className={styles.my_button} type="submit">Sign up</button>
+          <button className={styles.my_button} type="submit">
+          {isLoading ? <span className={styles.loader}></span> : "Sign up"}
+          </button>
           <div className={styles.sign_up}>
             <p>Have an account! </p>
             <a href="/signin">Sign in</a>

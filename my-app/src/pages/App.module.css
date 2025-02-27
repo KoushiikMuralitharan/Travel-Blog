@@ -65,6 +65,7 @@ input{
 label{
   font-size: small;
 }
+
 p , p + * {
   font-size: small;
 }
@@ -76,4 +77,19 @@ p , p + * {
 .sign_up{
   display: flex;
   column-gap: 5px;
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

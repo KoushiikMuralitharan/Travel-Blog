@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 
 function EditBlog() {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
@@ -36,6 +37,7 @@ function EditBlog() {
 
   const Update = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
@@ -50,8 +52,9 @@ function EditBlog() {
       body: formData
     })
     .then(response => response.json())
-      .then(data => {
+      .then(()=> {
         alert('Updated successfully.');
+        setIsLoading(false);
         navigate('/viewblog');
       })
       .catch(error => console.error('Error:', error));
@@ -110,7 +113,9 @@ function EditBlog() {
                 <img src={currentImageUrl} alt="current image"></img>
               </div>
             </div>
-            <button className={styles.my_button} type="submit">Update Blog</button>
+            <button className={styles.my_button} type="submit">
+              {isLoading ? <span className={styles.loader}></span>: "Update"}
+            </button>
           </form>
         </main>
   );

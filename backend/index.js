@@ -18,15 +18,6 @@ app.use(cors());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Define storage for the images
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   }
-// });
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -216,47 +207,7 @@ app.post("/add-blog/:id",authenticateToken,upload.single('image'),async(req, res
         });
     }
 })
-
-
-
-// app.post("/add-blog/:id",authenticateToken,async(req, res)=>{
-//     try{
-//         console.log("HI Darling!");
-//         const image_url = req.body.image;
-//         console.log(image_url)
-//         const cloudinary_res= await cloudinary.uploader.upload(image_url,{
-//             folder:"/cloudinary-files"
-//         }) 
-
-//         if (!cloudinary_res || !cloudinary_res.secure_url) {
-//             throw new Error("Image upload failed");
-//         } 
-//          // Log the Cloudinary response
-//          console.log("Cloudinary response:", cloudinary_res);
-
-//         const newBlog = await Blogs.create({
-//             title: req.body.title,
-//             content: req.body.content,
-//             imageUrl: cloudinary_res.secure_url,
-//             userID : req.params.id,
-//         });
-//         res.json({
-//             status: "success",
-//             message: "Blog added successfully.",
-//             newBlog: newBlog,
-//         })
-//     }catch(error){
-//         res.status(500).json({
-//             status:"failure",
-//             message: "Blog entry not added",
-//             error: error
-//         });
-//     }
-// })
-
-
-
-
+  
 
 app.get("/get-myblogs/:id", authenticateToken,async(req,res)=>{
     try{
