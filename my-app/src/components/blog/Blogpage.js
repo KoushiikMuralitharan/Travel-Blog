@@ -8,7 +8,7 @@ function Blogpage() {
   const [cookies] = useCookies(['token']);
   
   const allblogs = () =>{
-    fetch(`${process.env.REACT_APP_API_KEY}/all-blogs`,{
+    fetch(`${process.env.REACT_APP_API_KEY}/blog/all-blogs`,{
       method:"GET",
       headers:{
         "Authorization":`Bearer ${cookies.token}`,

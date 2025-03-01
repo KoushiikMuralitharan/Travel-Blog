@@ -10,7 +10,7 @@ const AdminSingleUserBlogs = () => {
   console.log(`this is the id  that i have passed ${id} ${name}`);
 
   const getMyBlogs = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/get-myblogs/${id}`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
@@ -40,7 +40,7 @@ const AdminSingleUserBlogs = () => {
   const handleDelete = async (blogID) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_KEY}/delete-blog/${blogID}`,
+        `${process.env.REACT_APP_API_KEY}/admin/delete-blog/${blogID}`,
         {
           method: "DELETE",
           headers: {

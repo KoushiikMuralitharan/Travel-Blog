@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./App.module.css";
-
+// REACT_APP_API_KEY="https://travel-blog-igqk.onrender.com"
 function SignUp() {
-  const [isLoading, setIsLoading] = useState(false); // Loader state
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [, setCookie] = useCookies([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -18,11 +18,10 @@ function SignUp() {
       setError("Please fill in all fields");
     } else {
       setError("");
-      setIsLoading(true); // Start loader
-      // Perform signup action (e.g., call to backend API)
+      setIsLoading(true);
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API_KEY}/addUser`,
+          `${process.env.REACT_APP_API_KEY}/user/addUser`,
           {
             method: "POST",
             headers: {
@@ -39,19 +38,19 @@ function SignUp() {
         if (!response.ok) {
           alert("Failed to sign up");
           setIsLoading(false);
-        } else if (loginData.status === "success" && loginData.userDetail) {
+        } else if (loginData.status === "Success" && loginData.userDetail) {
           alert("user account created successfully.");
           setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
-          setCookie("userID", loginData.userDetail.userID, {
+          setCookie("userId", loginData.userDetail.userId, {
             maxAge: 60 * 60 * 60,
           });
           navigate("/");
           window.location.reload();
         }
       } catch (error) {
-        console.log("API error");
+        console.log("API error", error);
       } finally {
-        setIsLoading(false); // Stop loader
+        setIsLoading(false);
       }
     }
   };
@@ -94,7 +93,7 @@ function SignUp() {
             ></input>
           </div>
           <button className={styles.my_button} type="submit">
-          {isLoading ? <span className={styles.loader}></span> : "Sign up"}
+            {isLoading ? <span className={styles.loader}></span> : "Sign up"}
           </button>
           <div className={styles.sign_up}>
             <p>Have an account! </p>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import styles from "./AdminDashboard.module.css"
+import styles from "./AdminDashboard.module.css";
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const allusers = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/all-users`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/admin/all-users`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
@@ -34,9 +34,8 @@ const AdminDashboard = () => {
 
   const handleMakeAdmin = async (id) => {
     setIsLoading(true);
-    // console.log("Make Admin clicked");
     const response = await fetch(
-      `${process.env.REACT_APP_API_KEY}/update-userrole/${id}`,
+      `${process.env.REACT_APP_API_KEY}/admin/update-userrole/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -56,10 +55,9 @@ const AdminDashboard = () => {
 
   const handleDeleteUser = async (id) => {
     setIsLoading(true);
-    // console.log("Delete User clicked");
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_KEY}/delete-user/${id}`,
+        `${process.env.REACT_APP_API_KEY}/admin/delete-user/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -80,40 +78,54 @@ const AdminDashboard = () => {
     }
   };
 
+  // useEffect(() => {
+  //   allusers();
+  // }, []);
+
   useEffect(() => {
     allusers();
-  }, []);
+  });
 
   return (
-    <main className={styles.main_content}>
-          <h2>All users</h2>
-          {users.length === 0 ? (
-            <p>No users available</p>
-          ) : (
-            users.map((users, index) => (
-              <div className={styles.card}>
-                <p className={styles.para}>
-                  <strong>Name:</strong> {users.username}
-                </p>
-                <p className={styles.para}>
-                  <strong>Email:</strong> {users.email}
-                </p>
-                <p className={styles.para}>
-                  <strong>Password:</strong> {users.password}
-                </p>
+    <main className={styles.main_content}> 
+      <h2>All users</h2>
+      {users.length === 0 ? (
+        <p>No users available</p>
+      ) : (
+        users.map((users, index) => (
+          <div key={index} className={styles.card}>
+            <p className={styles.para}>
+              <strong>Name:</strong> {users.username}
+            </p>
+            <p className={styles.para}>
+              <strong>Email:</strong> {users.email}
+            </p>
+            <p className={styles.para}>
+              <strong>Password:</strong> {users.password}
+            </p>
 
-                <div className={styles.buttons}>
-                  <button  onClick={()=>{handleViewBlog(users._id,users.username)}}>View</button>
-                  <button  onClick={()=>handleMakeAdmin(users._id)}>
-                    {isLoading ? <span className={styles.loader}></span> : "Make Admin"}
-                  </button>
-                  <button  onClick={()=> handleDeleteUser(users._id) }>
-                  {isLoading ? <span className={styles.loader}></span> : "Delete"}
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
+            <div className={styles.buttons}>
+              <button
+                onClick={() => {
+                  handleViewBlog(users._id, users.username);
+                }}
+              >
+                View
+              </button>
+              <button onClick={() => handleMakeAdmin(users._id)}>
+                {isLoading ? (
+                  <span className={styles.loader}></span>
+                ) : (
+                  "Make Admin"
+                )}
+              </button>
+              <button onClick={() => handleDeleteUser(users._id)}>
+                {isLoading ? <span className={styles.loader}></span> : "Delete"}
+              </button>
+            </div>
+          </div>
+        ))
+      )}
     </main>
   );
 };

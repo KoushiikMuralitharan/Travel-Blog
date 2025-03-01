@@ -1,44 +1,28 @@
 import styles from "./Navbar.module.css";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-// import { Navbar, Nav, Container } from 'react-bootstrap';
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const Navtab = () => {
-  // const [navbar, setNavbar] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
-  // const changeBackground = () => {
-  //   if (window.scrollY >= 80) {
-  //     setNavbar(true);
-  //   } else {
-  //     setNavbar(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', changeBackground);
-  //   return () => {
-  //     window.removeEventListener('scroll', changeBackground);
-  //   };
-  // }, []);
 
   useEffect(() => {
-    const token = Cookies.get("token"); // Get the token from cookies
-    console.log("Token from cookies:", token); // Debugging statement
+    const token = Cookies.get("token");
+    // console.log("Token from cookies:", token);
     if (token) {
       try {
         const userDetails = jwtDecode(token);
-        console.log("Decoded user details:", userDetails); // Debugging statement
+        console.log("Decoded user details:", userDetails);
         if (userDetails && userDetails.role === "admin") {
           setIsAdmin(true);
         } else {
           setIsAdmin(false);
         }
       } catch (error) {
-        console.error("Error decoding token:", error); // Debugging statement
+        console.error("Error decoding token:", error);
         setIsAdmin(false);
       }
     } else {
@@ -47,8 +31,9 @@ const Navtab = () => {
   }, [Cookies.get("token")]);
 
   const handleLogout = () => {
-    Cookies.remove("token"); // Remove the token from cookies
-    navigate("/signin"); // Redirect to the login page
+    Cookies.remove("token");
+    Cookies.remove("userId");
+    navigate("/signin");
   };
 
   return (
@@ -81,10 +66,14 @@ const Navtab = () => {
                 </a>
               </li>
               <li>
-                <a href="/viewblog"><i className="fa-solid fa-address-book"></i></a>
+                <a href="/viewblog">
+                  <i className="fa-solid fa-address-book"></i>
+                </a>
               </li>
               <li>
-                <a href="/postpage"><i className="fa-solid fa-message"></i></a>
+                <a href="/postpage">
+                  <i className="fa-solid fa-message"></i>
+                </a>
               </li>
               {isAdmin && (
                 <li className="nav-item">
@@ -99,7 +88,7 @@ const Navtab = () => {
                 </a>
               </li>
             </ul>
-          </div>
+          </div> 
         </div>
       </nav>
       <header>

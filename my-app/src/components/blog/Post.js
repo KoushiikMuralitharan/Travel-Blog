@@ -26,8 +26,10 @@ const Post = () => {
       setError("");
       try {
         setIsLoading(true);
+        console.log(cookies.userId);
+        console.log(cookies.userID);
         const response = await axios.post(
-          `${process.env.REACT_APP_API_KEY}/add-blog/${cookies.userID}`,
+          `${process.env.REACT_APP_API_KEY}/blog/add-blog/${cookies.userId}`,
           formData,
           {
             headers: {

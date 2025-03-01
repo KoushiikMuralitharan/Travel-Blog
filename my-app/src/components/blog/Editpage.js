@@ -16,7 +16,8 @@ function EditBlog() {
   const [cookies] = useCookies(["token"]);
   // console.log(id);
   const getSingleBlog = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/getting-blog/${id}`, {
+    console.log("The params to EditBlog: ",id);
+    fetch(`${process.env.REACT_APP_API_KEY}/blog/getting-blog/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
@@ -44,7 +45,7 @@ function EditBlog() {
     if (image) {
       formData.append('image', image);
     }
-    fetch(`${process.env.REACT_APP_API_KEY}/update-blog/${id}`, {
+    fetch(`${process.env.REACT_APP_API_KEY}/blog/update-blog/${id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${cookies.token}`,

@@ -21,8 +21,9 @@ function SignIn() {
       setIsLoading(true); // Start loader
       // Perform sign-in action (e.g., call to backend API)
       try {
+        console.log(process.env.REACT_APP_API_KEY)
         const loginresponse = await fetch(
-          `${process.env.REACT_APP_API_KEY}/validateUser`,
+          `${process.env.REACT_APP_API_KEY}/user/validateUser`,
           {
             method: "POST",
             headers: {
@@ -40,14 +41,15 @@ function SignIn() {
           setIsLoading(false);
         } else {
           setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
-          setCookie("userID", loginData.userDetail.userID, {
+          setCookie("userId", loginData.userDetail.userId, {
             maxAge: 60 * 60 * 60,
           });
+          
           navigate("/");
           window.location.reload();
         }
       } catch (error) {
-        console.log("API error");
+        console.log(`API ERROR ${error}`);
       }
     }
   };

@@ -7,7 +7,8 @@ function Viewblog() {
   const [blogs, setBlogs] = useState([]);
   const [cookies] = useCookies(["token"]);
   const getMyBlogs = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/get-myblogs/${cookies.userID}`, {
+    console.log("getMyBlogs",cookies.userId);
+    fetch(`${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${cookies.userId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${cookies.token}`,
@@ -37,7 +38,7 @@ function Viewblog() {
   const handleDelete = async (blogID) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_KEY}/delete-blog/${blogID}`,
+        `${process.env.REACT_APP_API_KEY}/blog/delete-blog/${blogID}`,
         {
           method: "DELETE",
           headers: {
