@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 import styles from "../components/blog/Viewblog.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { apiCall } from "../utils/api";
 const AdminSingleUserBlogs = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [cookies] = useCookies(["token"]);
   const { id, name } = useParams();
-  console.log(`this is the id  that i have passed ${id} ${name}`);
+  // console.log(`this is the id  that i have passed ${id} ${name}`);
 
-  const getMyBlogs = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${cookies.token}`,
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          console.log("data recieved from API:", data);
-          setBlogs(data);
-        } else {
-          console.error("Data received from API is not an array:", data);
-        }
-      })
-      .catch((err) => console.log(err));
+  const getMyBlogs = async () => {
+    try {
+      const data = await apiCall(
+        `${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${id}`,
+        "GET",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
+      );
+
+      if (Array.isArray(data)) {
+        setBlogs(data);
+      } else {
+        alert("Data is not in array format.");
+      }
+    } catch (error) {
+      console("Cannot able to get the blogs ", error);
+    }
   };
 
   useEffect(() => {
@@ -39,21 +39,17 @@ const AdminSingleUserBlogs = () => {
 
   const handleDelete = async (blogID) => {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_KEY}/admin/delete-blog/${blogID}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            "content-Type": "application/json",
-          },
-        }
+      const response = await apiCall(
+        `${process.env.REACT_APP_API_KEY}/blog/delete-blog/${blogID}`,
+        "DELETE",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
       );
-      if (response.ok) {
-        alert("Contact deleted successfully");
+      if (response.status === "Success") {
+        alert(response.message);
         getMyBlogs();
       } else {
-        alert("failed to delete the contact");
+        alert(response.message);
       }
     } catch (error) {
       console.error("Error deleting the contact:", error);

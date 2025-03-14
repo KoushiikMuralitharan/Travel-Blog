@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./App.module.css";
+import { apiCall } from "../utils/api";
 // REACT_APP_API_KEY="https://travel-blog-igqk.onrender.com"
 function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,28 +21,17 @@ function SignUp() {
       setError("");
       setIsLoading(true);
       try {
-        const response = await fetch(
+        const SignUpData = await apiCall(
           `${process.env.REACT_APP_API_KEY}/user/addUser`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username: username,
-              email: email,
-              password: password,
-            }),
-          }
+          "POST",
+          { username, email, password }
         );
-        const loginData = await response.json();
-        if (!response.ok) {
-          alert("Failed to sign up");
-          setIsLoading(false);
-        } else if (loginData.status === "Success" && loginData.userDetail) {
-          alert("user account created successfully.");
-          setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
-          setCookie("userId", loginData.userDetail.userId, {
+        console.log("Sign Up Ok:", SignUpData.ok);
+        // Handle successful response
+        if (SignUpData.status === "Success" && SignUpData.userDetail) {
+          alert("User Created Successfully");
+          setCookie("token", SignUpData.accessToken, { maxAge: 60 * 60 * 60 });
+          setCookie("userId", SignUpData.userDetail.userId, {
             maxAge: 60 * 60 * 60,
           });
           navigate("/");

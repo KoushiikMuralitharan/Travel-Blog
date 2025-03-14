@@ -2,29 +2,29 @@ import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "./AdminDashboard.module.css";
+import { apiCall } from "../utils/api";
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
-  const allusers = () => {
-    fetch(`${process.env.REACT_APP_API_KEY}/admin/all-users`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${cookies.token}`,
-        "content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          console.log("data recieved from API:", data);
-          setUsers(data);
-        } else {
-          console.error("Data received from API is not an array:", data);
-        }
-      })
-      .catch((err) => console.log(err));
+  const allusers = async () => {
+    try {
+      const response = await apiCall(
+        `${process.env.REACT_APP_API_KEY}/admin/all-users`,
+        "GET",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
+      );
+
+      if (Array.isArray(response)) {
+        setUsers(response);
+      } else {
+        alert("Data is not on the array format.");
+      }
+    } catch (error) {
+      console.log("Cannot get all the users ", error);
+    }
   };
 
   const handleViewBlog = (keys, name) => {
@@ -34,60 +34,58 @@ const AdminDashboard = () => {
 
   const handleMakeAdmin = async (id) => {
     setIsLoading(true);
-    const response = await fetch(
+    const response = await apiCall(
       `${process.env.REACT_APP_API_KEY}/admin/update-userrole/${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-          "content-Type": "application/json",
-        },
-      }
+      "PATCH",
+      null,
+      { Authorization: `Bearer ${cookies.token}` }
     );
-    if (response.ok) {
-      alert("User role updated successfully");
+    if (response.status === "Success") {
+      alert(response.message);
       setIsLoading(false);
       allusers();
     } else {
-      alert("failed to update the user role");
+      alert(response.message);
     }
   };
 
   const handleDeleteUser = async (id) => {
     setIsLoading(true);
     try {
-      const response = await fetch(
+      // const response = await fetch(
+      //   `${process.env.REACT_APP_API_KEY}/admin/delete-user/${id}`,
+      //   {
+      //     method: "DELETE",
+      //     headers: {
+      //       Authorization: `Bearer ${cookies.token}`,
+      //       "content-Type": "application/json",
+      //     },
+      //   }
+      // );
+      const response = await apiCall(
         `${process.env.REACT_APP_API_KEY}/admin/delete-user/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            "content-Type": "application/json",
-          },
-        }
+        "DELETE",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
       );
-      if (response.ok) {
-        alert("User deleted successfully");
+      if (response.status === "Success") {
+        alert(response.message);
         setIsLoading(false);
         allusers();
       } else {
-        alert("failed to delete the blog");
+        alert(response.message);
       }
     } catch (error) {
       console.error("Error deleting the user:", error);
     }
   };
 
-  // useEffect(() => {
-  //   allusers();
-  // }, []);
-
   useEffect(() => {
     allusers();
-  });
+  }, []);
 
   return (
-    <main className={styles.main_content}> 
+    <main className={styles.main_content}>
       <h2>All users</h2>
       {users.length === 0 ? (
         <p>No users available</p>

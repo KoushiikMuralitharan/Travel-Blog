@@ -2,56 +2,53 @@ import React, { useEffect, useState } from "react";
 import styles from "./Viewblog.module.css";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { apiCall } from "../../utils/api";
 function Viewblog() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [cookies] = useCookies(["token"]);
-  const getMyBlogs = () => {
-    console.log("getMyBlogs",cookies.userId);
-    fetch(`${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${cookies.userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${cookies.token}`,
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          console.log("data recieved from API:", data);
-          setBlogs(data);
-        } else {
-          console.error("Data received from API is not an array:", data);
-        }
-      })
-      .catch((err) => console.log(err));
+  const getMyBlogs = async () => {
+    try {
+      const data = await apiCall(
+        `${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${cookies.userId}`,
+        "GET",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
+      );
+
+      if (Array.isArray(data)) {
+        // console.log("Data received from API:", data);
+        setBlogs(data);
+      } else {
+        // console.error("Data is not an array:", data);
+        alert("Data is not in array format.");
+      }
+    } catch (error) {
+      console.error("Failed to fetch blogs:", error.message);
+    }
   };
 
   useEffect(() => {
     getMyBlogs();
-  }, []);
+  }, [cookies.userId, cookies.token]);
 
   const handleEdit = (id) => {
-    navigate(`/editblog/${id}`); 
+    navigate(`/editblog/${id}`);
   };
 
   const handleDelete = async (blogID) => {
     try {
-      const response = await fetch(
+      const response = await apiCall(
         `${process.env.REACT_APP_API_KEY}/blog/delete-blog/${blogID}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-            "content-Type": "application/json",
-          },
-        }
+        "DELETE",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
       );
-      if (response.ok) {
-        alert("Blog deleted successfully");
+      if (response.status === "Success") {
+        alert(response.message);
         getMyBlogs();
       } else {
-        alert("failed to delete the blog");
+        alert(response.message);
       }
     } catch (error) {
       console.error("Error deleting the blog:", error);
@@ -75,11 +72,14 @@ function Viewblog() {
             </div>
             <div className={styles.main_card_content}>
               <div>
-              <h3>{blog.title}</h3>
-              <div className={styles.card_content}>{blog.content}</div>
+                <h3>{blog.title}</h3>
+                <div className={styles.card_content}>{blog.content}</div>
               </div>
               <div className={styles.button_container}>
-                <button className={styles.my_buttons} onClick={() => handleEdit(blog._id)}>
+                <button
+                  className={styles.my_buttons}
+                  onClick={() => handleEdit(blog._id)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="30px"
@@ -90,7 +90,10 @@ function Viewblog() {
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
                   </svg>
                 </button>
-                <button className={styles.my_buttons} onClick={()=> handleDelete(blog._id)}>
+                <button
+                  className={styles.my_buttons}
+                  onClick={() => handleDelete(blog._id)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="30px"

@@ -7,33 +7,40 @@ import { useNavigate } from "react-router-dom";
 
 const Navtab = () => {
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = Cookies.get("token");
-    // console.log("Token from cookies:", token);
-    if (token) {
-      try {
-        const userDetails = jwtDecode(token);
-        console.log("Decoded user details:", userDetails);
-        if (userDetails && userDetails.role === "admin") {
-          setIsAdmin(true);
-        } else {
+    const checkAuth = () => {
+      const token = Cookies.get("token");
+      if (token) {
+        try {
+          const userDetails = jwtDecode(token);
+          setIsAuthenticated(true);
+          // console.log("Decoded user details:", userDetails);
+          if (userDetails && userDetails.role === "admin") {
+            setIsAdmin(true);
+          } else {
+            setIsAdmin(false);
+          }
+        } catch (error) {
+          console.error("Error decoding token:", error);
           setIsAdmin(false);
+          setIsAuthenticated(false);
         }
-      } catch (error) {
-        console.error("Error decoding token:", error);
+      } else {
         setIsAdmin(false);
+        setIsAuthenticated(false);
       }
-    } else {
-      setIsAdmin(false);
-    }
-  }, [Cookies.get("token")]);
+    };
+    checkAuth();
+  }, []);
 
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("userId");
     navigate("/signin");
+    setIsAuthenticated(false);
   };
 
   return (
@@ -53,11 +60,6 @@ const Navtab = () => {
               <li>
                 <a href="/">
                   <i className="fa-duotone fa-solid fa-house fa-lg"></i>
-                </a>
-              </li>
-              <li>
-                <a href="/signin">
-                  <i className="fa-duotone fa-solid fa-right-to-bracket fa-lg"></i>
                 </a>
               </li>
               <li>
@@ -82,13 +84,21 @@ const Navtab = () => {
                   </a>
                 </li>
               )}
-              <li>
-                <a href="#" onClick={handleLogout}>
-                  <i className="fa-duotone fa-solid fa-right-from-bracket fa-lg"></i>
-                </a>
-              </li>
+              {isAuthenticated ? (
+                <li>
+                  <a href="#" onClick={handleLogout}>
+                    <i className="fa-solid fa-right-from-bracket fa-lg"></i>
+                  </a>
+                </li>
+              ) : (
+                <li>
+                  <a href="/signin">
+                    <i className="fa-solid fa-right-to-bracket fa-lg"></i>
+                  </a>
+                </li>
+              )}
             </ul>
-          </div> 
+          </div>
         </div>
       </nav>
       <header>

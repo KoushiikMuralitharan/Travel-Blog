@@ -1,6 +1,6 @@
 const User = require("../Modals/userModel");
 const jwt = require("jsonwebtoken");
-const dotenv =require('dotenv');
+const dotenv = require("dotenv");
 
 dotenv.config();
 const accessKey = process.env.JWT_SECRET;
@@ -18,24 +18,24 @@ const addUser = async (req, res) => {
         email: req.body.email,
         password: req.body.password,
       });
-      
+
       const userDetail = {
         username: user.username,
         email: user.email,
         userId: user._id,
       };
-      
+
       const accessToken = generateToken(userDetail);
-      res.json({
+      res.status(200).json({
         status: "Success",
         message: "user account created successfully",
         accessToken: accessToken,
         userDetail: userDetail,
       });
     } else {
-      res.json({
+      res.status(409).json({
         status: "failed",
-        message: "user account not created.",
+        message: "user account already present.",
       });
     }
   } catch (error) {
@@ -69,7 +69,7 @@ const validateUser = async (req, res) => {
 
       const accessToken = generateToken(userDetail);
       res.json({
-        status: "success",
+        status: "Success",
         message: "entered into the website",
         accessToken: accessToken,
         userDetail: userDetail,
@@ -82,4 +82,4 @@ const validateUser = async (req, res) => {
   }
 };
 
-module.exports = {addUser, validateUser}
+module.exports = { addUser, validateUser };

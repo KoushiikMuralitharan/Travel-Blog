@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {apiCall} from '../../utils/api'
 import styles from "./Blogpage.module.css";
 
 const Post = () => {
@@ -23,23 +23,17 @@ const Post = () => {
     if (title === "" || content === "") {
       setError("Please fill in all fields");
     } else {
-      setError("");
+      //setError("");
       try {
         setIsLoading(true);
-        console.log(cookies.userId);
-        console.log(cookies.userID);
-        const response = await axios.post(
+        const response = await apiCall(
           `${process.env.REACT_APP_API_KEY}/blog/add-blog/${cookies.userId}`,
+          "POST",
           formData,
-          {
-            headers: {
-              Authorization: `Bearer ${cookies.token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
+          { Authorization: `Bearer ${cookies.token}` }
         );
-        if (response.data.status === "success") {
-          alert(response.data.message);
+        if (response.status === "Success") {
+          alert(response.message);
           setIsLoading(false);
           navigate("/viewblog");
         } else {

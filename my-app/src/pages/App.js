@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { apiCall } from "../utils/api";
 import styles from "./App.module.css";
 
 function SignIn() {
-  const [isLoading, setIsLoading] = useState(false); // Loader state
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [, setCookie] = useCookies([]);
@@ -13,40 +14,27 @@ function SignIn() {
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you can add your authentication logic
     if (email === "" || password === "") {
       setError("Please fill in all fields");
     } else {
       setError("");
-      setIsLoading(true); // Start loader
-      // Perform sign-in action (e.g., call to backend API)
+      setIsLoading(true);
       try {
-        console.log(process.env.REACT_APP_API_KEY)
-        const loginresponse = await fetch(
+        const loginData = await apiCall(
           `${process.env.REACT_APP_API_KEY}/user/validateUser`,
-          {
-            method: "POST",
-            headers: {
-              "content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: email,
-              password: password,
-            }),
-          }
+          "POST",
+          { email, password }
         );
-        const loginData = await loginresponse.json();
-        if (loginData.status === "failure") {
-          alert(loginData.message);
-          setIsLoading(false);
-        } else {
+        if (loginData.status === "Success") {
+          navigate("/");
+          window.location.reload();
+          console.log("API Response:", loginData);
           setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
           setCookie("userId", loginData.userDetail.userId, {
             maxAge: 60 * 60 * 60,
           });
-          
-          navigate("/");
-          window.location.reload();
+        } else {
+          alert(loginData.message);
         }
       } catch (error) {
         console.log(`API ERROR ${error}`);
@@ -54,7 +42,6 @@ function SignIn() {
     }
   };
   return (
-    // Inside the SignIn component
     <>
       <main className={styles.main_container}>
         <div className={styles.sub_container}>
@@ -95,5 +82,4 @@ function SignIn() {
     </>
   );
 }
-// added
 export default SignIn;
