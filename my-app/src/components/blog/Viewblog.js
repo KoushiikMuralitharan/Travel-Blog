@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../Styles/Viewblog.module.css";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { apiCall } from "../../utils/api";
 function Viewblog() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
-  const [cookies] = useCookies(["token"]);
+  const token = Cookies.get("token");
+  const userId = Cookies.get("userId");
   const getMyBlogs = async () => {
     try {
       const data = await apiCall(
-        `${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${cookies.userId}`,
+        `${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${userId}`,
         "GET",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
 
       if (data.status === "Success") {
@@ -28,7 +29,7 @@ function Viewblog() {
 
   useEffect(() => {
     getMyBlogs();
-  }, [cookies.userId, cookies.token]);
+  }, [userId, token]);
 
   const handleEdit = (id) => {
     navigate(`/editblog/${id}`);
@@ -40,7 +41,7 @@ function Viewblog() {
         `${process.env.REACT_APP_API_KEY}/blog/delete-blog/${blogID}`,
         "DELETE",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
       if (response.status === "Success") {
         alert(response.message);

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import {apiCall} from '../../utils/api'
+import { apiCall } from "../../utils/api";
 import styles from "../../Styles/Blogpage.module.css";
 const Post = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
-  const [cookies] = useCookies(["token"]);
+  const token = Cookies.get("token");
+  const userId = Cookies.get("userId");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
@@ -22,14 +23,14 @@ const Post = () => {
     if (title === "" || content === "") {
       setError("Please fill in all fields");
     } else {
-      //setError("");
+      setError("");
       try {
         setIsLoading(true);
         const response = await apiCall(
-          `${process.env.REACT_APP_API_KEY}/blog/add-blog/${cookies.userId}`,
+          `${process.env.REACT_APP_API_KEY}/blog/add-blog/${userId}`,
           "POST",
           formData,
-          { Authorization: `Bearer ${cookies.token}` }
+          { Authorization: `Bearer ${token}` }
         );
         if (response.status === "Success") {
           alert(response.message);
@@ -74,8 +75,8 @@ const Post = () => {
           <div className={styles.svg_container}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width= "40px"
-              height= "40px"
+              width="40px"
+              height="40px"
               viewBox="0 -960 960 960"
               fill="#5f6368"
             >

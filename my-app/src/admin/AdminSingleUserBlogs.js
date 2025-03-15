@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "../Styles/Viewblog.module.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import  Cookies  from "js-cookie";
 import { apiCall } from "../utils/api";
 const AdminSingleUserBlogs = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
-  const [cookies] = useCookies(["token"]);
+  const token = Cookies.get("token");
   const { id, name } = useParams();
   const getMyBlogs = async () => {
     try {
@@ -14,7 +14,7 @@ const AdminSingleUserBlogs = () => {
         `${process.env.REACT_APP_API_KEY}/blog/get-myblogs/${id}`,
         "GET",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
 
       if (data.status === "Success") {
@@ -41,7 +41,7 @@ const AdminSingleUserBlogs = () => {
         `${process.env.REACT_APP_API_KEY}/blog/delete-blog/${blogID}`,
         "DELETE",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
       if (response.status === "Success") {
         alert(response.message);

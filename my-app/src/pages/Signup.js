@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "../Styles/App.module.css";
 import { apiCall } from "../utils/api";
@@ -9,7 +10,7 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [, setCookie] = useCookies([]);
+  // const [, setCookie] = useCookies([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
@@ -26,13 +27,16 @@ function SignUp() {
           "POST",
           { username, email, password }
         );
-        console.log("Sign Up Ok:", SignUpData.ok);
         // Handle successful response
         if (SignUpData.status === "Success" && SignUpData.userDetail) {
           alert("User Created Successfully");
-          setCookie("token", SignUpData.accessToken, { maxAge: 60 * 60 * 60 });
-          setCookie("userId", SignUpData.userDetail.userId, {
-            maxAge: 60 * 60 * 60,
+          // setCookie("token", SignUpData.accessToken, { maxAge: 60 * 60 * 60 });
+          // setCookie("userId", SignUpData.userDetail.userId, {
+          //   maxAge: 60 * 60 * 60,
+          // });
+          Cookies.set("token", SignUpData.accessToken, { expires: 2 / 24 });
+          Cookies.set("userId", SignUpData.userDetail.userId, {
+            expires: 2 / 24,
           });
           navigate("/");
           window.location.reload();

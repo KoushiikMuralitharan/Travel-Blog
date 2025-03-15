@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import styles from "../../Styles/Viewblog.module.css";
 import { apiCall } from "../../utils/api";
 
 function Blogpage() {
   const [blogs, setBlogs] = useState([]);
-  const [cookies] = useCookies(["token"]);
-
+  const token = Cookies.get("token");
   const allblogs = async () => {
     try {
       const data = await apiCall(
         `${process.env.REACT_APP_API_KEY}/blog/all-blogs`,
         "GET",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
-      if(data.status === "Success"){
+      if (data.status === "Success") {
         setBlogs(data.blogs);
-      }else{
+      } else {
         alert(data.message);
       }
     } catch (error) {
-      alert("An error occured on getting the blog ",error);
+      alert("An error occured on getting the blog ", error);
     }
   };
 

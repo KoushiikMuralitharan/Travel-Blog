@@ -1,9 +1,8 @@
 import styles from "../../Styles/Navbar.module.css";
 import React, { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 
 const Navtab = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -17,7 +16,6 @@ const Navtab = () => {
         try {
           const userDetails = jwtDecode(token);
           setIsAuthenticated(true);
-          // console.log("Decoded user details:", userDetails);
           if (userDetails && userDetails.role === "admin") {
             setIsAdmin(true);
           } else {

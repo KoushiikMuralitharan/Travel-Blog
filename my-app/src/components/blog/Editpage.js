@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "../../Styles/Blogpage.module.css";
-import { useParams } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { apiCall } from "../../utils/api";
 
 function EditBlog() {
@@ -13,15 +12,14 @@ function EditBlog() {
   const [image, setImage] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
   const navigate = useNavigate();
-  const [cookies] = useCookies(["token"]);
-  // console.log(id);
+  const token = Cookies.get("token");
   const getSingleBlog = async () => {
     try {
       const data = await apiCall(
         `${process.env.REACT_APP_API_KEY}/blog/getting-blog/${id}`,
         "GET",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
       if (data.status === "Success") {
         setTitle(data.data.title);
@@ -52,7 +50,7 @@ function EditBlog() {
         `${process.env.REACT_APP_API_KEY}/blog/update-blog/${id}`,
         "PATCH",
         formData,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
 
       if (response.status === "Success") {

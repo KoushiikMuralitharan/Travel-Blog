@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "../Styles/AdminDashboard.module.css";
 import { apiCall } from "../utils/api";
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
-  const [cookies] = useCookies(["token"]);
+  // const [cookies] = useCookies(["token"]);
+  const token = Cookies.get("token");
+  const userId = Cookies.get("userId");
   const navigate = useNavigate();
   const allusers = async () => {
     try {
@@ -14,7 +17,7 @@ const AdminDashboard = () => {
         `${process.env.REACT_APP_API_KEY}/admin/all-users`,
         "GET",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
 
       if (Array.isArray(response)) {
@@ -38,7 +41,7 @@ const AdminDashboard = () => {
       `${process.env.REACT_APP_API_KEY}/admin/update-userrole/${id}`,
       "PATCH",
       null,
-      { Authorization: `Bearer ${cookies.token}` }
+      { Authorization: `Bearer ${token}` }
     );
     if (response.status === "Success") {
       alert(response.message);
@@ -52,21 +55,11 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     setIsLoading(true);
     try {
-      // const response = await fetch(
-      //   `${process.env.REACT_APP_API_KEY}/admin/delete-user/${id}`,
-      //   {
-      //     method: "DELETE",
-      //     headers: {
-      //       Authorization: `Bearer ${cookies.token}`,
-      //       "content-Type": "application/json",
-      //     },
-      //   }
-      // );
       const response = await apiCall(
         `${process.env.REACT_APP_API_KEY}/admin/delete-user/${id}`,
         "DELETE",
         null,
-        { Authorization: `Bearer ${cookies.token}` }
+        { Authorization: `Bearer ${token}` }
       );
       if (response.status === "Success") {
         alert(response.message);

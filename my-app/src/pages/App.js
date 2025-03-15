@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import Cookies from "js-cookie";
 import { apiCall } from "../utils/api";
 import styles from "../Styles/App.module.css";
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [, setCookie] = useCookies([]);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -25,13 +24,13 @@ function SignIn() {
           { email, password }
         );
         if (loginData.status === "Success") {
+          // console.log("API Response:", loginData);
+          Cookies.set("token", loginData.accessToken, { expires: 2 / 24 });
+          Cookies.set("userId", loginData.userDetail.userId, {
+            expires: 2 / 24,
+          });
           navigate("/");
           window.location.reload();
-          console.log("API Response:", loginData);
-          setCookie("token", loginData.accessToken, { maxAge: 60 * 60 * 60 });
-          setCookie("userId", loginData.userDetail.userId, {
-            maxAge: 60 * 60 * 60,
-          });
         } else {
           alert(loginData.message);
         }
