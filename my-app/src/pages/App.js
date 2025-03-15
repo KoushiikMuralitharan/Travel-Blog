@@ -7,15 +7,22 @@ function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState({ email: "", password: "" });
 
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (email === "" || password === "") {
-      setError("Please fill in all fields");
+
+    const newErrors = {};
+
+    if (!email) newErrors.email = "Email is required.";
+    if (!password) newErrors.password = "Password is required.";
+
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      return;
     } else {
-      setError("");
+      setError({});
       setIsLoading(true);
       try {
         const loginData = await apiCall(
@@ -33,9 +40,11 @@ function SignIn() {
           window.location.reload();
         } else {
           alert(loginData.message);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(`API ERROR ${error}`);
+        setIsLoading(false);
       }
     }
   };
@@ -54,8 +63,29 @@ function SignIn() {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (!e.target.value) {
+                    setError((prev) => ({
+                      ...prev,
+                      email: "Email is required.",
+                    }));
+                  } else {
+                    setError((prev) => ({ ...prev, email: "" }));
+                  }
+                }}
+                onBlur={() => {
+                  if (!email) {
+                    setError((prev) => ({
+                      ...prev,
+                      email: "Email is required.",
+                    }));
+                  }
+                }}
               ></input>
+              {error.email && (
+                <p className={styles.error_message}>{error.email}</p>
+              )}
             </div>
             <div className={styles.form_input}>
               <label id="formPassword">Password:</label>
@@ -64,10 +94,35 @@ function SignIn() {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (!e.target.value) {
+                    setError((prev) => ({
+                      ...prev,
+                      password: "Password is required.",
+                    }));
+                  } else {
+                    setError((prev) => ({ ...prev, password: "" }));
+                  }
+                }}
+                onBlur={() => {
+                  if (!password) {
+                    setError((prev) => ({
+                      ...prev,
+                      password: "password is required.",
+                    }));
+                  }
+                }}
               ></input>
+              {error.password && (
+                <p className={styles.error_message}>{error.password}</p>
+              )}
             </div>
-            <button className={styles.my_button} type="submit">
+            <button
+              className={styles.my_button}
+              type="submit"
+              disabled={isLoading}
+            >
               {isLoading ? <span className={styles.loader}></span> : "Login"}
             </button>
             <div className={styles.sign_up}>

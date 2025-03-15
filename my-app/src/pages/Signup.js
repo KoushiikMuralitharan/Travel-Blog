@@ -1,25 +1,29 @@
 import React, { useState } from "react";
-// import { useCookies } from "react-cookie";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "../Styles/App.module.css";
 import { apiCall } from "../utils/api";
 // REACT_APP_API_KEY="https://travel-blog-igqk.onrender.com"
 function SignUp() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [, setCookie] = useCookies([]);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState({ username: "", email: "", password: "" });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you can add your signup logic
-    if (username === "" || email === "" || password === "") {
-      setError("Please fill in all fields");
+
+    const newErrors = {};
+    if (!username) newErrors.username = "Username is required.";
+    if (!email) newErrors.email = "Email is required.";
+    if (!password) newErrors.password = "Password is required.";
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      return;
     } else {
-      setError("");
+      setError({});
       setIsLoading(true);
       try {
         const SignUpData = await apiCall(
@@ -27,19 +31,15 @@ function SignUp() {
           "POST",
           { username, email, password }
         );
-        // Handle successful response
         if (SignUpData.status === "Success" && SignUpData.userDetail) {
           alert("User Created Successfully");
-          // setCookie("token", SignUpData.accessToken, { maxAge: 60 * 60 * 60 });
-          // setCookie("userId", SignUpData.userDetail.userId, {
-          //   maxAge: 60 * 60 * 60,
-          // });
           Cookies.set("token", SignUpData.accessToken, { expires: 2 / 24 });
           Cookies.set("userId", SignUpData.userDetail.userId, {
             expires: 2 / 24,
           });
           navigate("/");
           window.location.reload();
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("API error", error);
@@ -63,8 +63,29 @@ function SignUp() {
               type="text"
               placeholder="Enter your username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (!e.target.value) {
+                  setError((prev) => ({
+                    ...prev,
+                    username: "Userrname is required.",
+                  }));
+                } else {
+                  setError((prev) => ({ ...prev, username: "" }));
+                }
+              }}
+              onBlur={() => {
+                if (!username) {
+                  setError((prev) => ({
+                    ...prev,
+                    username: "Userrname is required.",
+                  }));
+                }
+              }}
             ></input>
+            {error.username && (
+              <p className={styles.error_message}>{error.username}</p>
+            )}
           </div>
           <div className={styles.form_input}>
             <label id="formEmail">Email:</label>
@@ -73,8 +94,29 @@ function SignUp() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (!e.target.value) {
+                  setError((prev) => ({
+                    ...prev,
+                    email: "Email is required.",
+                  }));
+                } else {
+                  setError((prev) => ({ ...prev, email: "" }));
+                }
+              }}
+              onBlur={() => {
+                if (!email) {
+                  setError((prev) => ({
+                    ...prev,
+                    email: "Email is required.",
+                  }));
+                }
+              }}
             ></input>
+            {error.email && (
+              <p className={styles.error_message}>{error.email}</p>
+            )}
           </div>
           <div className={styles.form_input}>
             <label id="formPassword">Password:</label>
@@ -83,10 +125,35 @@ function SignUp() {
               type="password"
               placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (!e.target.value) {
+                  setError((prev) => ({
+                    ...prev,
+                    password: "Password is required.",
+                  }));
+                } else {
+                  setError((prev) => ({ ...prev, password: "" }));
+                }
+              }}
+              onBlur={() => {
+                if (!password) {
+                  setError((prev) => ({
+                    ...prev,
+                    password: "password is required.",
+                  }));
+                }
+              }}
             ></input>
+            {error.password && (
+              <p className={styles.error_message}>{error.password}</p>
+            )}
           </div>
-          <button className={styles.my_button} type="submit">
+          <button
+            className={styles.my_button}
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? <span className={styles.loader}></span> : "Sign up"}
           </button>
           <div className={styles.sign_up}>

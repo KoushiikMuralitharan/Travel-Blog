@@ -6,13 +6,15 @@ import { apiCall } from "../../utils/api";
 
 function EditBlog() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState("");
-  const navigate = useNavigate();
+  const [error, setError] = useState({ title: "", content: "" });
   const token = Cookies.get("token");
+
   const getSingleBlog = async () => {
     try {
       const data = await apiCall(
@@ -36,32 +38,48 @@ function EditBlog() {
     getSingleBlog();
   }, [id]);
 
+  const handleRemoveImage = async () => {
+    setCurrentImageUrl(null);
+  };
+
   const Update = async (e) => {
     e.preventDefault();
+    const newErrors = {};
+    if (!title) newErrors.title = "Title is required.";
+    if (!content) newErrors.content = "Content is required.";
     setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      if (image) {
-        formData.append("image", image);
-      }
-      const response = await apiCall(
-        `${process.env.REACT_APP_API_KEY}/blog/update-blog/${id}`,
-        "PATCH",
-        formData,
-        { Authorization: `Bearer ${token}` }
-      );
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      return;
+    } else {
+      try {
+        setIsLoading(true);
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("content", content);
+        if (image) {
+          formData.append("image", image);
+        } else if (!currentImageUrl) {
+          formData.append("image", "");
+        }
+        const response = await apiCall(
+          `${process.env.REACT_APP_API_KEY}/blog/update-blog/${id}`,
+          "PATCH",
+          formData,
+          { Authorization: `Bearer ${token}` }
+        );
 
-      if (response.status === "Success") {
-        alert("Blog Updated Successfully.");
-        setIsLoading(false);
-        navigate("/viewblog");
-      } else {
-        alert(response.message);
+        if (response.status === "Success") {
+          alert("Blog Updated Successfully.");
+          setIsLoading(false);
+          navigate("/viewblog");
+        } else {
+          alert(response.message);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log("Error on updating the blog.", error);
       }
-    } catch (error) {
-      console.log("Error on updating the blog.", error);
     }
   };
 
@@ -75,8 +93,21 @@ function EditBlog() {
             type="text"
             placeholder="Enter blog title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (!e.target.value) {
+                setError((prev) => ({ ...prev, title: "Title is required." }));
+              } else {
+                setError((prev) => ({ ...prev, title: "" }));
+              }
+            }}
+            onBlur={() => {
+              if (!title) {
+                setError((prev) => ({ ...prev, title: "Title is required." }));
+              }
+            }}
           ></input>
+          {error.title && <p className={styles.error_message}>{error.title}</p>}
         </div>
         <div className={styles.form_input}>
           <label id="formContent">Content:</label>
@@ -85,8 +116,29 @@ function EditBlog() {
             type="text"
             placeholder="Enter blog content..."
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value);
+              if (!e.target.value) {
+                setError((prev) => ({
+                  ...prev,
+                  content: "Content is required.",
+                }));
+              } else {
+                setError((prev) => ({ ...prev, content: "" }));
+              }
+            }}
+            onBlur={() => {
+              if (!content) {
+                setError((prev) => ({
+                  ...prev,
+                  content: "Content is required.",
+                }));
+              }
+            }}
           ></textarea>
+          {error.content && (
+            <p className={styles.error_message}>{error.content}</p>
+          )}
         </div>
 
         <div className={styles.form_container}>
@@ -112,13 +164,22 @@ function EditBlog() {
             ></input>
           </div>
         </div>
-        <div className={styles.form_current_image}>
-          <p>Current image:</p>
-          <div className={styles.current_img_main_container}>
-            <img src={currentImageUrl} alt="current image"></img>
+        {currentImageUrl && (
+          <div className={styles.form_current_image}>
+            <p>Current image:</p>
+            <div className={styles.current_img_main_container}>
+              <img src={currentImageUrl} alt="current image" />
+            </div>
+            <button
+              type="button"
+              className={styles.my_button}
+              onClick={handleRemoveImage}
+            >
+              Remove Image
+            </button>
           </div>
-        </div>
-        <button className={styles.my_button} type="submit">
+        )}
+        <button className={styles.my_button} type="submit" disabled={isLoading}>
           {isLoading ? <span className={styles.loader}></span> : "Update"}
         </button>
       </form>

@@ -2,10 +2,11 @@ const Blog = require("../Modals/BlogModel");
 
 const addBlog = async (req, res) => {
   try {
+    const defaultImageUrl = "https://thumbs.dreamstime.com/b/add-image-line-icon-add-image-line-icon-outline-vector-sign-linear-style-pictogram-isolated-white-picture-plus-symbol-logo-103640588.jpg"
     const newBlog = await Blog.create({
       title: req.body.title,
       content: req.body.content,
-      imageUrl: req.file ? req.file.path : null,
+      imageUrl: req.file ? req.file.path : defaultImageUrl,
       userId: req.params.id,
     });
     res.json({
@@ -41,14 +42,16 @@ const myBlogs = async (req, res) => {
 
 const updateBlog = async (req, res) => {
   try {
+    const defaultImageUrl = "https://thumbs.dreamstime.com/b/add-image-line-icon-add-image-line-icon-outline-vector-sign-linear-style-pictogram-isolated-white-picture-plus-symbol-logo-103640588.jpg"
     const updateData = {
       title: req.body.title,
       content: req.body.content,
     };
     if (req.file) {
       updateData.imageUrl = req.file.path;
+    } else if (req.body.image === "") {
+      updateData.imageUrl = defaultImageUrl;
     }
-    console.log("Received data:", req.body);
     await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.status(200).json({
       status: "Success",

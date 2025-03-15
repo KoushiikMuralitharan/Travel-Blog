@@ -10,22 +10,27 @@ const Post = () => {
   const [image, setImage] = useState(null);
   const token = Cookies.get("token");
   const userId = Cookies.get("userId");
-  const [error, setError] = useState("");
+  const [error, setError] = useState({ title: "", content: "" });
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const newErrors = {};
+
+    if (!title) newErrors.title = "Title is required.";
+    if (!content) newErrors.content = "Content is required.";
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
     formData.append("image", image);
 
-    if (title === "" || content === "") {
-      setError("Please fill in all fields");
+    if (Object.keys(newErrors).length > 0) {
+      setError(newErrors);
+      return;
     } else {
-      setError("");
+      setError({});
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const response = await apiCall(
           `${process.env.REACT_APP_API_KEY}/blog/add-blog/${userId}`,
           "POST",
@@ -38,11 +43,11 @@ const Post = () => {
           navigate("/viewblog");
         } else {
           setError(response.data.message);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("API Error", error);
-        setError("An error occurred while adding the blog");
-        alert("An error occurred while adding the blog");
+        setIsLoading(false);
       }
     }
   };
@@ -56,8 +61,21 @@ const Post = () => {
             type="text"
             placeholder="Enter blog title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              if (!title) {
+                setError((prev) => ({ ...prev, title: "Title is required." }));
+              } else {
+                setError((prev) => ({ ...prev, title: "" }));
+              }
+            }}
+            onBlur={() => {
+              if (!title) {
+                setError((prev) => ({ ...prev, title: "Title is required." }));
+              }
+            }}
           ></input>
+          {error.title && (<p className={styles.error_message}>{error.title}</p>)}
         </div>
         <div className={styles.form_input}>
           <label id="formContent">Content:</label>
@@ -66,8 +84,27 @@ const Post = () => {
             type="text"
             placeholder="Enter blog content..."
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value);
+              if (!e.target.value) {
+                setError((prev) => ({
+                  ...prev,
+                  content: "Content is required.",
+                }));
+              } else {
+                setError((prev) => ({ ...prev, content: "" }));
+              }
+            }}
+            onBlur={() => {
+              if (!content) {
+                setError((prev) => ({
+                  ...prev,
+                  content: "Content is required.",
+                }));
+              }
+            }}
           ></textarea>
+           {error.content && (<p className={styles.error_message}>{error.content}</p>)}
         </div>
 
         <div className={styles.form_container}>
@@ -93,7 +130,7 @@ const Post = () => {
             ></input>
           </div>
         </div>
-        <button className={styles.my_button} type="submit">
+        <button className={styles.my_button} type="submit" disabled={isLoading}>
           {isLoading ? <span className={styles.loader}></span> : "Add Blog"}
         </button>
       </form>

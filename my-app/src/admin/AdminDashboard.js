@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useCookies } from "react-cookie";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import styles from "../Styles/AdminDashboard.module.css";
@@ -7,9 +6,7 @@ import { apiCall } from "../utils/api";
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
-  // const [cookies] = useCookies(["token"]);
   const token = Cookies.get("token");
-  const userId = Cookies.get("userId");
   const navigate = useNavigate();
   const allusers = async () => {
     try {
@@ -20,10 +17,10 @@ const AdminDashboard = () => {
         { Authorization: `Bearer ${token}` }
       );
 
-      if (Array.isArray(response)) {
-        setUsers(response);
+      if (response.status === "Success") {
+        setUsers(response.users);
       } else {
-        alert("Data is not on the array format.");
+        alert(response.message);
       }
     } catch (error) {
       console.log("Cannot get all the users ", error);
@@ -31,7 +28,6 @@ const AdminDashboard = () => {
   };
 
   const handleViewBlog = (keys, name) => {
-    console.log(keys);
     navigate(`/admin/viewuserblogs/${keys}/${name}`);
   };
 

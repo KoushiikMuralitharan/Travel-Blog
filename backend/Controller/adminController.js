@@ -18,10 +18,22 @@ const DeleteUser = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  const allUsers = await User.find({ role: { $ne: "admin" } }).sort({
-    createdAt: -1,
-  });
-  res.json(allUsers);
+  try{
+    const allUsers = await User.find({ role: { $ne: "admin" } }).sort({
+      createdAt: -1,
+    });
+    res.status(200).json({
+      status: "Success",
+      message: "fetched all the users.",
+      users: allUsers
+    });
+  }catch(error){
+    res.status(400).json({
+      status: "failure",
+      message: "not able to fetch the users.",
+      users: allUsers
+    });
+  }
 };
 
 const updateUserRole = async (req, res) => {
