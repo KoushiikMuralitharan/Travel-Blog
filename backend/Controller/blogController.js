@@ -26,11 +26,15 @@ const myBlogs = async (req, res) => {
     created: -1,
   });
   try {
-    res.status(200).json(myBlog);
+    res.status(200).json({
+      status: "Success",
+      message: "The blogs are fetched successfully.",
+      blogs: myBlog
+    });
   } catch (error) {
     res.status(500).json({
       status: "failure",
-      message: `Data cannot be fetched. ${error}`,
+      message: `Blogs cannot be fetched. ${error}`,
     });
   }
 };
@@ -45,7 +49,6 @@ const updateBlog = async (req, res) => {
       updateData.imageUrl = req.file.path;
     }
     console.log("Received data:", req.body);
-    // console.log("I am calling this from update blog controller:",req.params.id)
     await Blog.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.status(200).json({
       status: "Success",
@@ -75,8 +78,20 @@ const deleteBlog = async (req, res) => {
 };
 
 const getAllBlogs = async (req, res) => {
+ try{
   const allBlogs = await Blog.find({}).sort({ createdAt: -1 });
-  res.json(allBlogs);
+  res.status(200).json({
+    status: "Success",
+    message: "got all the blogs.",
+    blogs: allBlogs
+  });
+ }catch(error){
+  res.status(500).json({
+    status: "failure",
+    message: "Cannot get the blogs.",
+    blogs: allBlogs
+  });
+ }
 };
 
 const getSingleBlog = async (req, res) => {

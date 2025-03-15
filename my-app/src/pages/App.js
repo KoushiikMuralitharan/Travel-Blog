@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { apiCall } from "../utils/api";
-import styles from "./App.module.css";
-
+import styles from "../Styles/App.module.css";
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");

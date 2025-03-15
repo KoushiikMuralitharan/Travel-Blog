@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Blogpage.module.css";
+import styles from "../../Styles/Blogpage.module.css";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { apiCall } from "../../utils/api";

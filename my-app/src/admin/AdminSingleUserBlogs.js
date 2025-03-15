@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "../components/blog/Viewblog.module.css";
+import styles from "../Styles/Viewblog.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { apiCall } from "../utils/api";
@@ -8,8 +8,6 @@ const AdminSingleUserBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [cookies] = useCookies(["token"]);
   const { id, name } = useParams();
-  // console.log(`this is the id  that i have passed ${id} ${name}`);
-
   const getMyBlogs = async () => {
     try {
       const data = await apiCall(
@@ -19,10 +17,10 @@ const AdminSingleUserBlogs = () => {
         { Authorization: `Bearer ${cookies.token}` }
       );
 
-      if (Array.isArray(data)) {
-        setBlogs(data);
+      if (data.status === "Success") {
+        setBlogs(data.blogs);
       } else {
-        alert("Data is not in array format.");
+        alert(data.message);
       }
     } catch (error) {
       console("Cannot able to get the blogs ", error);

@@ -1,63 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
-import { useCookies } from 'react-cookie';
-import styles from "./Viewblog.module.css";
+import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import styles from "../../Styles/Viewblog.module.css";
+import { apiCall } from "../../utils/api";
 
 function Blogpage() {
   const [blogs, setBlogs] = useState([]);
-  const [cookies] = useCookies(['token']);
-  
-  const allblogs = () =>{
-    fetch(`${process.env.REACT_APP_API_KEY}/blog/all-blogs`,{
-      method:"GET",
-      headers:{
-        "Authorization":`Bearer ${cookies.token}`,
-        "content-Type": "application/json"
-      }
-    })
-    .then((res)=>res.json())
-    .then((data)=>{
-      if(Array.isArray(data)){
-        console.log("data recieved from API:", data);
-        setBlogs(data);
+  const [cookies] = useCookies(["token"]);
+
+  const allblogs = async () => {
+    try {
+      const data = await apiCall(
+        `${process.env.REACT_APP_API_KEY}/blog/all-blogs`,
+        "GET",
+        null,
+        { Authorization: `Bearer ${cookies.token}` }
+      );
+      if(data.status === "Success"){
+        setBlogs(data.blogs);
       }else{
-        console.error("Data received from API is not an array:", data);
+        alert(data.message);
       }
-     
-    })
-    .catch((err)=> console.log(err));
-  }
+    } catch (error) {
+      alert("An error occured on getting the blog ",error);
+    }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     allblogs();
-  },[]);
-
-  
+  }, []);
 
   return (
-   <main className={styles.main_content_area}>
-         {blogs.length === 0 ? (
-           <p>No blogs available. Add a new blog to get started.</p>
-         ) : (
-           blogs.map((blog) => (
-             <div className={styles.main_card_container} key={blog._id}>
-               <div className={styles.image_container}>
-                 <img
-                   className={styles.card_image}
-                   src={blog.imageUrl}
-                   alt="place image"
-                 ></img>
-               </div>
-               <div className={styles.main_card_content}>
-                 <div>
-                 <h3>{blog.title}</h3>
-                 <div className={styles.card_content}>{blog.content}</div>
-                 </div>
-               </div>
-             </div>
-           ))
-         )}
-       </main>
+    <main className={styles.main_content_area}>
+      {blogs.length === 0 ? (
+        <p>No blogs available. Add a new blog to get started.</p>
+      ) : (
+        blogs.map((blog) => (
+          <div className={styles.main_card_container} key={blog._id}>
+            <div className={styles.image_container}>
+              <img
+                className={styles.card_image}
+                src={blog.imageUrl}
+                alt="place image"
+              ></img>
+            </div>
+            <div className={styles.main_card_content}>
+              <div>
+                <h3>{blog.title}</h3>
+                <div className={styles.card_content}>{blog.content}</div>
+              </div>
+            </div>
+          </div>
+        ))
+      )}
+    </main>
   );
 }
 

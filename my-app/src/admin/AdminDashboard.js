@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import styles from "./AdminDashboard.module.css";
+import styles from "../Styles/AdminDashboard.module.css";
 import { apiCall } from "../utils/api";
 const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Viewblog.module.css";
+import styles from "../../Styles/Viewblog.module.css";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { apiCall } from "../../utils/api";
@@ -16,15 +16,13 @@ function Viewblog() {
         { Authorization: `Bearer ${cookies.token}` }
       );
 
-      if (Array.isArray(data)) {
-        // console.log("Data received from API:", data);
-        setBlogs(data);
+      if (data.status === "Success") {
+        setBlogs(data.blogs);
       } else {
-        // console.error("Data is not an array:", data);
-        alert("Data is not in array format.");
+        alert(data.message);
       }
     } catch (error) {
-      console.error("Failed to fetch blogs:", error.message);
+      console.log("Failed to fetch blogs:", error);
     }
   };
 

@@ -1,4 +1,4 @@
-import styles from "./Navbar.module.css";
+import styles from "../../Styles/Navbar.module.css";
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";

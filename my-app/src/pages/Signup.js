@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import styles from "./App.module.css";
+import styles from "../Styles/App.module.css";
 import { apiCall } from "../utils/api";
 // REACT_APP_API_KEY="https://travel-blog-igqk.onrender.com"
 function SignUp() {

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Homepage.module.css";
+import styles from "../Styles/Homepage.module.css";
 const HomePage = () => {
   return (
     <main className={styles.main_content}>

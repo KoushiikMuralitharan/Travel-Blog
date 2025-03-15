@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {apiCall} from '../../utils/api'
-import styles from "./Blogpage.module.css";
-
+import styles from "../../Styles/Blogpage.module.css";
 const Post = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");

@@ -30,7 +30,11 @@
   border-radius: 5px;
   width: 40%;
   cursor: pointer;
+  outline: none;
+  border: none;
   align-self: center;
+  background-color: purple;
+  color: white;
 }
 
 input{
@@ -55,6 +59,8 @@ textarea{
   border-radius: 5px;
   padding: 15px;
   resize: none;
+  border: none;
+  outline: none;
 }
 
 .image{
